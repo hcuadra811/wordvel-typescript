@@ -1,0 +1,15 @@
+{
+  "name": "@wordvel/bridge",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "wordvel-bridge": "bin/wordvel-bridge.js",
+    "wordvel-react": "bin/wordvel-bridge.js"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "description": "SPA preview sync bridge for WordVel editor previews"
+}
