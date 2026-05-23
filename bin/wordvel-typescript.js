@@ -8,7 +8,7 @@ import { syncWordVelPreview } from '../src/index.js';
 const [, , command, configPath] = process.argv;
 
 if (command !== 'sync' || !configPath) {
-  console.error('Usage: wordvel-bridge sync <config.mjs>');
+  console.error('Usage: wordvel-typescript sync <config.mjs>');
   process.exit(1);
 }
 
