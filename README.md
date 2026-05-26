@@ -2,9 +2,7 @@
 
 WordVel TypeScript is the framework-agnostic TypeScript foundation for WordVel SPA integrations.
 
-This package started as the editor preview bridge proof. The next step is to extract the generic pieces into a reusable SDK that React, Vue, Svelte, Solid, and future adapters can build on without duplicating manifest parsing, placeholder generation, preview artifact formatting, CSS collection, or sync behavior.
-
-The current proof still contains the first preview-sync implementation. Treat this repository as the future home of the generic TypeScript SDK, not as a React-specific package.
+This package owns the generic pieces that React, Vue, Svelte, Solid, and future adapters can build on without duplicating manifest parsing, placeholder generation, preview artifact formatting, CSS collection, sync behavior, or inline editing data transforms.
 
 ## Current Capabilities
 
@@ -12,12 +10,34 @@ The current proof still contains the first preview-sync implementation. Treat th
 - Builds placeholder values that match DTO field names.
 - Collects linked stylesheets and configured CSS files.
 - Posts preview HTML and CSS to the WordVel editor preview endpoint.
+- Creates framework-neutral preview artifacts from already-rendered block HTML.
+- Defines inline editing field bindings, patches, and immutable path helpers.
 
 ## Current Usage
 
 ```bash
 npx wordvel-typescript sync wordvel.config.mjs
 ```
+
+The generic CLI expects your config to provide rendered block previews:
+
+```js
+export default {
+  manifest: '../wordvel/storage/wordvel/manifest.json',
+  endpoint: 'http://wordvel-api.test/api/wordvel/editor-preview',
+  css: ['./dist/assets/app.css'],
+  async renderPreviewBlocks({ manifest, placeholders }) {
+    return Object.fromEntries(
+      (manifest.blocks ?? []).map((block) => [
+        block.key,
+        { html: `<section>${placeholders[block.key]?.headline ?? ''}</section>` },
+      ]),
+    );
+  },
+};
+```
+
+React component configs should use `@wordvel/react` and `wordvel-react sync`.
 
 ## Direction
 
