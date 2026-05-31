@@ -3,7 +3,7 @@
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
-import { syncWordVelPreview } from '../src/index.js';
+import { syncWordVelPreview } from '../src/tooling.js';
 
 const [, , command, configPath] = process.argv;
 

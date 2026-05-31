@@ -8,6 +8,10 @@
     ".": {
       "types": "./src/index.d.ts",
       "default": "./src/index.js"
+    },
+    "./tooling": {
+      "types": "./src/tooling.d.ts",
+      "default": "./src/tooling.js"
     }
   },
   "bin": {

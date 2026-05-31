@@ -103,14 +103,6 @@ export type InlineEditBinding = {
 
 export type CreateInlineEditPatchInput = InlineEditPatch;
 
-export function loadManifest(input: string | WordVelManifest): Promise<WordVelManifest>;
-export function createPlaceholderProps(fields?: WordVelFieldSchema[]): Record<string, unknown>;
-export function collectPreviewCss(config?: CssCollectionConfig): Promise<string>;
-export function createPreviewArtifact(input: CreatePreviewArtifactInput): WordVelPreviewArtifact;
-export function syncPreviewArtifact(config: SyncPreviewArtifactConfig): Promise<SyncPreviewResult>;
-export function createWordVelPreview(config: WordVelPreviewSyncConfig): Promise<WordVelPreviewArtifact>;
-export function syncWordVelPreview(config: WordVelPreviewSyncConfig): Promise<SyncPreviewResult>;
-export function createPreviewPlaceholders(manifest: WordVelManifest): Record<string, Record<string, unknown>>;
 export function createInlineEditBinding(field: InlineEditableField): InlineEditBinding;
 export function createInlineEditPatch(input: CreateInlineEditPatchInput): InlineEditPatch;
 export function getValueAtPath(data: unknown, path: string): unknown;
@@ -120,3 +112,48 @@ export function normalizeInlineEditableField(
   pathPrefix?: string,
 ): InlineEditableField;
 export function isInlineEditableField(field: WordVelFieldSchema | InlineEditableField): boolean;
+
+// ---------------------------------------------------------------------------
+// Runtime API client (generic page/site fetching for any WordVel backend)
+// ---------------------------------------------------------------------------
+
+export interface WordVelFetchOptions {
+  baseUrl: string;
+  language?: string;
+  headers?: Record<string, string>;
+}
+
+export interface WordVelPage {
+  id: number;
+  slug: string;
+  title: string;
+  status: string;
+  blocks: Array<{ type: string; data: Record<string, unknown> }>;
+  [key: string]: unknown;
+}
+
+export function fetchWordVelResource<T = unknown>(
+  options: WordVelFetchOptions,
+  path: string
+): Promise<T>;
+
+export function fetchPage(
+  options: WordVelFetchOptions,
+  slug: string
+): Promise<WordVelPage>;
+
+export function fetchSite<T = unknown>(options: WordVelFetchOptions): Promise<T>;
+
+export function createWordVelClient(baseOptions: WordVelFetchOptions): {
+  fetchPage: (slug: string, overrides?: Partial<WordVelFetchOptions>) => Promise<WordVelPage>;
+  fetchSite: (overrides?: Partial<WordVelFetchOptions>) => Promise<unknown>;
+  fetchResource: <T = unknown>(path: string, overrides?: Partial<WordVelFetchOptions>) => Promise<T>;
+};
+
+export function blockData(
+  page: { blocks?: Array<{ type: string; data?: unknown }> } | null | undefined,
+  type: string
+): unknown;
+
+export function mediaUrl(media: unknown): string;
+export function mediaAlt(media: unknown, fallback?: string): string;
